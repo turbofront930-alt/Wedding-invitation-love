@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرح إبراهيم & عفاف</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; --bg-night: #050b1a; --overlay: rgba(5, 11, 26, 0.9); }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg-night); color: white; margin: 0; overflow: hidden; background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); }
+
+        /* انيميشن الخواتم */
+        #intro-layer { position: fixed; inset: 0; z-index: 2000; background: var(--bg-night); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s; }
+        .rings-container { font-size: 80px; display: flex; gap: 20px; animation: rings-merge 2.5s forwards; }
+        @keyframes rings-merge { 0% { gap: 150px; opacity: 0; transform: scale(0.5); } 50% { gap: -20px; opacity: 1; transform: scale(1.1); } 100% { gap: -15px; transform: scale(1); } }
+
+        /* تأثيرات الخلفية */
+        #stars-container, #hearts-container, #fireworks-container { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite ease-in-out; }
+        .falling-heart { position: absolute; color: rgba(212, 175, 55, 0.3); font-size: 20px; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
+
+        /* توهج الأسماء */
+        .neon-text { font-family: 'Amiri', serif; font-size: 2.3rem; color: var(--gold); animation: pulse 2s infinite; text-align: center; margin: 10px 0; }
+        @keyframes pulse { 0%, 100% { text-shadow: 0 0 5px var(--gold); } 50% { text-shadow: 0 0 20px var(--gold), 0 0 30px #fff; } }
+
+        /* الصفحات */
+        .page, #game-layer { display: none; height: 100vh; text-align: center; padding: 20px; box-sizing: border-box; overflow-y: auto; background: var(--overlay); z-index: 10; }
+        .active { display: flex; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 1s; }
+        
+        .slider-container { 
+            width: 90%; 
+            max-width: 300px; 
+            height: 420px; 
+            position: relative; 
+            margin: 15px auto; 
+            border-radius: 20px; 
+            border: 2px solid var(--gold); 
+            overflow: hidden; 
+            background: rgba(0,0,0,0.4); 
+        }
+        .slider-img { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; opacity: 0; transition: 1s; }
+        .slider-img.active-img { opacity: 1; }
+
+        #countdown { display: flex; gap: 8px; margin: 15px 0; }
+        .time-box { border: 1px solid var(--gold); padding: 8px; border-radius: 10px; background: rgba(212, 175, 55, 0.1); min-width: 55px; }
+        .time-box span { display: block; font-size: 1.2rem; color: var(--gold); font-weight: bold; }
+
+        .btn-main { background: transparent; color: var(--gold); padding: 12px 25px; border-radius: 30px; border: 2px solid var(--gold); cursor: pointer; margin: 8px; font-weight: bold; transition: 0.4s; text-decoration: none; display: inline-block; font-size: 0.9rem; }
+        .btn-main:hover { background: var(--gold); color: black; box-shadow: 0 0 15px var(--gold); }
+        
+        .poetry { font-style: italic; color: #ddd; margin: 10px 0; font-size: 1.1rem; line-height: 1.5; padding: 0 10px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop><source src="wedding-song.mp3" type="audio/mpeg"></audio>
+<div id="stars-container"></div>
+<div id="hearts-container"></div>
+<div id="fireworks-container"></div>
+
+<div id="intro-layer">
+    <div class="rings-container"><span>💍</span><span>💍</span></div>
+    <h2 style="color: var(--gold); margin-top: 20px;">إبراهيم & عفاف</h2>
+    <p>بين النجوم.. تكتمل أجمل حكاية</p>
+</div>
+
+<div id="game-layer">
+    <h1 class="neon-text">إبراهيم & عفاف</h1>
+    <p class="poetry">"بين ضي النجوم وضحكة القرايب..<br>هنكتب أول سطر في مشوارنا"</p>
+    <div id="score">اجمع 3 نجوم لتضيء ليلة العمر: 0</div>
+    <div id="game-area" style="width: 100%; height: 250px; position: relative; margin-top: 20px;"></div>
+</div>
+
+<div id="p1" class="page">
+    <h1 class="neon-text">إبراهيم & عفاف</h1>
+    <div class="slider-container">
+        <img src="pic1.jpg" class="slider-img active-img">
+        <img src="pic2.jpg" class="slider-img">
+        <img src="pic3.jpg" class="slider-img">
+        <img src="pic4.jpg" class="slider-img">
+    </div>
+    <p class="poetry">نتشرف بدعوتكم لحفل زفافنا لنكتمل بوجودكم</p>
+    <button class="btn-main" onclick="nextPage(2)">متى وأين؟ ⏳</button>
+</div>
+
+<div id="p2" class="page">
+    <h1 style="color: var(--gold);">موعدنا المنتظر</h1>
+    <div id="countdown">
+        <div class="time-box"><span id="days">0</span>يوم</div>
+        <div class="time-box"><span id="hours">0</span>ساعة</div>
+        <div class="time-box"><span id="mins">0</span>دقيقة</div>
+    </div>
+    <div style="border: 1px solid var(--gold); padding: 15px; border-radius: 15px; background: rgba(255,255,255,0.05); width: 85%;">
+        <p>الأحد، 5 سبتمبر 2027</p>
+        <p>قاعة القصر بأشمون</p>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <a href="https://wa.me/201101475409?text=ألف+مبروك+يا+عريس!+ربنا+يتمم+لك+أنت+وعفاف+على+خير..+سجلت+تهنئتي+لكم+✨" target="_blank" class="btn-main" style="background: var(--gold); color: black;">كلمة للعروسين ✍️</a>
+        <br>
+        <a href="https://wa.me/201101475409?text=تم+تأكيد+الحضور+لفرح+إبراهيم+وعفاف..+جايين+نفرح+معاكم!+✅" target="_blank" class="btn-main">تأكيد الحضور</a>
+        <a href="https://wa.me/?text=شاركونا+فرحتنا+بزفاف+إبراهيم+وعفاف:++https://turbofront930-alt.github.io/Wedding-invitation-me0/" target="_blank" class="btn-main">مشاركة الرابط</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
+<script>
+    // دخول الموقع
+    setTimeout(() => {
+        document.getElementById('intro-layer').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('intro-layer').style.display = 'none';
+            document.getElementById('game-layer').style.display = 'flex';
+            document.getElementById('game-layer').classList.add('active');
+        }, 1000);
+    }, 3000);
+
+    const sCon = document.getElementById('stars-container');
+    const hCon = document.getElementById('hearts-container');
+    for(let i=0; i<80; i++) {
+        let s = document.createElement('div'); s.className='star';
+        s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*100+'%';
+        s.style.width=s.style.height=Math.random()*3+'px';
+        s.style.setProperty('--duration', Math.random()*3+2+'s'); sCon.appendChild(s);
+    }
+    setInterval(() => {
+        let h = document.createElement('div'); h.className='falling-heart'; h.innerHTML='❤️';
+        h.style.left=Math.random()*100+'%'; h.style.animationDuration=Math.random()*4+3+'s';
+        hCon.appendChild(h); setTimeout(() => h.remove(), 6000);
+    }, 800);
+
+    const fwCon = document.getElementById('fireworks-container');
+    const fireworks = new Fireworks.default(fwCon, { autoresize: true, opacity: 0.4, particles: 60, intensity: 30 });
+
+    let score = 0;
+    function createStar() {
+        let star = document.createElement('div'); star.innerHTML='⭐'; star.className='star-btn';
+        star.style.cssText = `left:${Math.random()*80}%; top:${Math.random()*80}%; font-size:50px; cursor:pointer; position:absolute; z-index:1001;`;
+        star.onclick = () => {
+            score++; document.getElementById('score').innerText=`النجوم المضيئة: ${score}`;
+            star.remove(); if(score >= 3) { 
+                document.getElementById('game-layer').style.display='none';
+                document.getElementById('p1').classList.add('active');
+                document.getElementById('bgMusic').play(); startSlider();
+                fireworks.start();
+                setTimeout(() => fireworks.stop(), 15000);
+            } else createStar();
+        };
+        document.getElementById('game-area').appendChild(star);
+    }
+    createStar();
+
+    function startSlider() {
+        let imgs = document.querySelectorAll('.slider-img'); let i = 0;
+        setInterval(() => {
+            imgs[i].classList.remove('active-img');
+            i = (i + 1) % imgs.length;
+            imgs[i].classList.add('active-img');
+        }, 3000);
+    }
+
+    function updateTimer() {
+        const target = new Date('2027-09-05T19:00:00');
+        const diff = target - new Date();
+        if(diff > 0) {
+            document.getElementById('days').innerText = Math.floor(diff/(1000*60*60*24));
+            document.getElementById('hours').innerText = Math.floor((diff/(1000*60*60))%24);
+            document.getElementById('mins').innerText = Math.floor((diff/1000/60)%60);
+        }
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    function nextPage(n) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('p'+n).classList.add('active');
+    }
+</script>
+</body>
+</html>
